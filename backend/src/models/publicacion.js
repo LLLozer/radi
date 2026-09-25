@@ -20,7 +20,7 @@ export const Publicacion = sequelize.define('Publicacion', {
     defaultValue: false,
   },
   condicion: {
-    type: DataTypes.ENUM('AUTISMO', 'DIFICULTAD_APRENDIZAJE', 'SORDERA', 'OTRO'),
+    type: DataTypes.ENUM('AUTISMO', 'DIFICULTAD_APRENDIZAJE', 'SORDERA', 'TDAH', 'DISLEXIA', 'OTRO'),
     allowNull: false,
   },
   nivel_educativo: {

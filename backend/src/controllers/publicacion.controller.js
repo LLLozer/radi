@@ -67,3 +67,47 @@ export const obtenerPublicaciones = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener el foro.' });
   }
 };
+
+// Obtener una publicación específica con sus comentarios completos
+export const obtenerPublicacionPorId = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const publicacion = await Publicacion.findByPk(id, {
+      include: [
+        {
+          model: Usuario,
+          as: 'autor',
+          attributes: ['id', 'nombre_completo', 'rol', 'titulo_profesional']
+        },
+        {
+          model: Comentario,
+          as: 'comentarios',
+          include: [
+            {
+              model: Usuario,
+              as: 'autor',
+              attributes: ['nombre_completo', 'rol'] // Traemos al autor de cada comentario
+            }
+          ]
+        }
+      ]
+    });
+
+    if (!publicacion) {
+      return res.status(404).json({ error: 'Publicación no encontrada.' });
+    }
+
+    // Lógica de anonimato para el caso
+    const datosPublicacion = publicacion.toJSON();
+    if (datosPublicacion.es_anonimo && datosPublicacion.autor) {
+      datosPublicacion.autor.nombre_completo = 'Docente Anónimo';
+    }
+
+    res.status(200).json(datosPublicacion);
+    
+  } catch (error) {
+    console.error('Error al obtener la publicación:', error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
+};

@@ -17,8 +17,8 @@ const PORT = process.env.PORT || 3004;
 
 // Configuración de CORS para permitir peticiones desde el frontend (ej. React/Vite)
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-  credentials: true // Obligatorio para que el navegador acepte y envíe la cookie con el JWT
+  origin: 'http://localhost:5173', // La URL de tu React (Vite)
+  credentials: true
 }));
 
 app.use(express.json()); // Permite a Express leer JSON en el req.body
